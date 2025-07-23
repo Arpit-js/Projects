@@ -15,7 +15,7 @@ body {
   align-items: center;
   gap: 10px;
   margin: 0.5rem 0;
-  justify-content: flex-start; /* 👈 aligns items inside each task to the right */
+  justify-content: flex-start;
   width: 100%;
   max-width: 300px; 
 }
