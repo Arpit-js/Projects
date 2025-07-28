@@ -1,42 +1,82 @@
-let input = document.querySelector(".t1");
-let btn = document.querySelector(".add-btn");
-let container = document.querySelector(".container2");
 
-function assignTask() {
-    const taskText = input.value.trim(); 
+let container = document.querySelector(".container");
+let startBtn = document.querySelector(".start");
+let subHeading = document.querySelector("h3");
+let colors = ["red", "blue", "green", "yellow"];
 
-    if (taskText !== '') {
-        const taskDiv = document.createElement("div");
-        taskDiv.classList.add("tasks");
+let gameSeq = [];
+let playerSeq = [];
+let level = 0;
+let started = false;
 
-        const divLabel = document.createElement("label");
+startBtn.addEventListener("click", () => {
+    if (started) return;
+    started = true;
 
-        const divInput = document.createElement("input");
-        divInput.type = "checkbox";
+    const exitBtn = document.createElement("button");
+    exitBtn.classList.add("exit");
+    exitBtn.textContent = "Exit";
+    exitBtn.addEventListener("click", () => location.reload());
 
-        const divSpan = document.createElement("span");
-        divSpan.textContent = taskText;
-        
-         divLabel.appendChild(divInput);
-        divLabel.appendChild(divSpan);
+    startBtn.remove();
+    container.appendChild(exitBtn);
 
-        
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.classList.add("delete-btn");
+    levelUp();
+});
 
-        deleteBtn.addEventListener("click", () => {
-            taskDiv.remove();
-        });
+function levelUp() {
+    playerSeq = [];
+    level++;
+    subHeading.textContent = `Level ${level}`;
 
-        taskDiv.appendChild(divLabel);
-        taskDiv.appendChild(deleteBtn);
-        
+    let rndm = Math.floor(Math.random() * 4);
 
-        container.appendChild(taskDiv);
+    let rndmColor = colors[rndm];
+    gameSeq.push(rndmColor);
+    let color = document.querySelector(`.${rndmColor}`);
+    flash(color);
+    // ----------------
+    subHeading.textContent = `Level ${level}`;
+subHeading.classList.add("level-up");
+setTimeout(() => subHeading.classList.remove("level-up"), 600);
 
-        input.value = "";
-    }
 }
 
-btn.addEventListener("click", assignTask);
+function flash(btn) {
+    btn.classList.add("flash");
+    setTimeout(() => {
+        btn.classList.remove("flash");
+    }, 300);
+}
+
+function btnPress(){
+    btnId = this;
+    let idColor = btnId.getAttribute("id");
+    playerSeq.push(idColor);
+    flash(this);
+    check(playerSeq.length-1);
+}
+
+let keys = document.querySelectorAll(".color");
+for(key of keys){
+    key.addEventListener("click", btnPress);
+}
+
+function check(indx) {
+
+    if(gameSeq[indx] === playerSeq[indx]){
+        if(gameSeq.length == playerSeq.length){
+            setTimeout(() => {
+            levelUp();
+            }, 600);
+        } else{
+            
+        }
+    } else{
+        subHeading.textContent = "game over!!! Please try again";
+        started = false;
+        level = 0;
+        return;
+    }
+    
+}
